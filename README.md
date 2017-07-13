@@ -49,6 +49,7 @@ The fix for this is to:
 * execute the following: 
 	* `git clean -fx`
 	* `npm install`
+* if you stashed your files executed:  `git stash pop`
 * then proceed with the build
 
 ## Important Build-related Configuration Files
