@@ -42,15 +42,17 @@ For UI development purposes, we recommend using [npm][] directly. Please ensure 
 **NOTE:** Before building be sure that the `ng-serve` development server has been shutdown.
 
 ### Build fails after merging a branch or changing branches.
-In some cases the npm-modules or other dependencies become inconsistent during branch changes.
-The fix for this is to:
-* shutdown the development server it is running.
-* commit or stash your changes
-* execute the following: 
+In some cases the npm-modules or other dependencies may become inconsistent during branch changes.
+In order to resolve the problem we need to clean out inconsistent dependencies.  
+The following instructions can be used to do this:
+
+* Shutdown the development server it is running.
+* Commit or stash your changes
+* Execute the following: 
 	* `git clean -fx`
 	* `npm install`
-* if you stashed your files executed:  `git stash pop`
-* then proceed with the build
+* If you stashed your files execute the following:  `git stash pop`
+* Now build the application by executing the following: `ng build --prod`
 
 ## Important Build-related Configuration Files
 
