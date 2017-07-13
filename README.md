@@ -47,8 +47,8 @@ The fix for this is to:
 * shutdown the development server it is running.
 * commit or stash your changes
 * execute the following: 
-	$ git clean -fx
-	$ npm install
+	* `git clean -fx`
+	* `npm install`
 * then proceed with the build
 
 ## Important Build-related Configuration Files
