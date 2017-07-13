@@ -38,6 +38,18 @@ For UI development purposes, we recommend using [npm][] directly. Please ensure 
 	$ cd spring-cloud-dataflow-ui/ui
 	$ npm install
 	$ ng build --prod
+	
+**NOTE:** Before building be sure that the `ng-serve` development server has been shutdown.
+
+### Build fails after merging a branch or changing branches.
+In some cases the npm-modules or other dependencies become inconsistent during branch changes.
+The fix for this is to:
+* shutdown the development server it is running.
+* commit or stash your changes
+* execute the following: 
+	$ git clean -fx
+	$ npm install
+* then proceed with the build
 
 ## Important Build-related Configuration Files
 
