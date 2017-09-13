@@ -55,7 +55,7 @@ export class BarChartComponent implements OnInit, DoCheck {
   }
 
   private isArraySame(array1: number[], array2: number[]): boolean {
-    if ((!array1 && array2) || (array2 && !array2)) {
+    if ((!array1 && array2) || (array1 && !array2)) {
       return false;
     }
 
@@ -73,7 +73,7 @@ export class BarChartComponent implements OnInit, DoCheck {
 
   /**
    * Re-render the chart, in case the window is resized in
-   * order to maintain dimentsions.
+   * order to maintain dimensions.
    *
    * @param event Window resize event
    */
@@ -103,7 +103,6 @@ export class BarChartComponent implements OnInit, DoCheck {
     const reversedChartData = this.chartData.slice();
     reversedChartData.reverse();
 
-    const margin = {top: 20, right: 10, bottom: 20, left: 10};
     const xValuesRange = [0, d3.max(reversedChartData)];
     const xScale = d3.scaleLinear().range([0, widthToUse]).domain(xValuesRange);
 

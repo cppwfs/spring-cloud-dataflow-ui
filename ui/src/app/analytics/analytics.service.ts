@@ -27,7 +27,7 @@ export class AnalyticsService {
 
   public metricTypes: MetricType[] = MetricType.getMetricTypes();
 
-  rowId = 1; // For Dashboard
+  private rowId = 1; // For Dashboard
   public dashboardItems: DashboardItem[];
 
   constructor(
@@ -97,7 +97,7 @@ export class AnalyticsService {
    *
    * @param detailed If true will request additional counter values from the REST endpoint
    */
-  public getAllCounters(detailed = false): Observable<Page<Counter>> {
+  private  getAllCounters(detailed = false): Observable<Page<Counter>> {
 
       if (!this.counters) {
         this.counters = new Page<Counter>();
@@ -112,7 +112,6 @@ export class AnalyticsService {
       }
 
       requestOptionsArgs.search = params;
-      const handleRates = true;
       return this.http.get(this.metricsCountersUrl, requestOptionsArgs)
                       .map(response => this.extractData(response, detailed))
                       .catch(this.errorHandler.handleError);
@@ -120,7 +119,6 @@ export class AnalyticsService {
 
   private extractData(response: Response, handleRates: boolean): Page<Counter> {
     const body = response.json();
-    console.log('body', body);
     const items: Counter[] = [];
     const cache: Counter[] = [];
 
@@ -130,7 +128,6 @@ export class AnalyticsService {
       }
       if (body._embedded && body._embedded.counterResourceList) {
         for (const counterResourceListItems of body._embedded.counterResourceList) {
-          console.log('>>>>>>', counterResourceListItems);
           const counter = new Counter().deserialize(counterResourceListItems);
 
           if (cache[counter.name]) {
@@ -151,7 +148,6 @@ export class AnalyticsService {
       }
     }
 
-    console.log('items', items);
     const page = new Page<Counter>();
     page.items = items;
     page.totalElements = body.page.totalElements;
@@ -162,6 +158,11 @@ export class AnalyticsService {
     return page;
   }
 
+  /**
+   * Adds a new empty dashboard item to the dashboardItems array.
+   * @param {number} index the location it should be added.
+   * @returns {DashboardItem} the new instance of the {DashboardItem}.
+   */
   addNewDashboardItem(index?: number): DashboardItem {
     if (!this.dashboardItems) {
       this.dashboardItems = [];
@@ -171,16 +172,18 @@ export class AnalyticsService {
     dashboardItem.refreshRate = 2;
     dashboardItem.visualization = '';
 
-    console.log('>>>', this.dashboardItems);
     if (index) {
       this.dashboardItems.splice(index, 0, dashboardItem);
     } else {
       this.dashboardItems.push(dashboardItem);
     }
-    console.log('>>>', this.dashboardItems);
     return dashboardItem;
   }
 
+  /**
+   * Remove dashboard item from dashboardItems array and splice the array.
+   * @param {number} index the offset of the dashboard item to remove.
+   */
   removeDashboardItem(index: number): void {
     if (!this.dashboardItems || this.dashboardItems.length === 0) {
       return;
@@ -188,11 +191,22 @@ export class AnalyticsService {
     this.dashboardItems.splice(index, 1);
   }
 
+  /**
+   * Retrieve a list of all dashboardItems.
+   * @returns {Observable<DashboardItem>} observable of dashboard items.
+   */
   getAllDashboardItems(): Observable<DashboardItem> {
-    this.addNewDashboardItem();
+    if (!this.dashboardItems) {
+      this.addNewDashboardItem();
+    }
     return Observable.from(this.dashboardItems);
   }
 
+  /**
+   * Retrieve all metrics for a specific type.
+   * @param {MetricType} metricType the specific metric type to retrieve.
+   * @returns {Observable<Page<Counter>>} Page containing the metrics.
+   */
   getStreamsForMetricType(metricType: MetricType) {
     if (MetricType.COUNTER === metricType) {
       return this.getAllCounters();
@@ -201,18 +215,10 @@ export class AnalyticsService {
     }
   }
 
-  getVisualizationsForMetricType(metricType: MetricType) {
-    if (MetricType.COUNTER.id === metricType.id) {
-      return this.getAllCounters();
-    }
-  }
-
   resetDashboard() {
     this.dashboardItems.length = 0;
     this.addNewDashboardItem();
   }
-
-  //
 
     /**
    * Starts the polling process for a single counters. Method
@@ -241,7 +247,7 @@ export class AnalyticsService {
    * Stops the polling process for counters if the poller
    * is running and is defined.
    */
-  public stopPollingOfSingleDashboarItem(dashboardItem: DashboardItem) {
+  public stopPollingOfSingleDashboardItem(dashboardItem: DashboardItem) {
     if (dashboardItem.counterPoller && !dashboardItem.counterPoller.closed) {
       dashboardItem.counterPoller.unsubscribe();
     }
@@ -254,8 +260,8 @@ export class AnalyticsService {
    *
    * Will NOT restart the poller if the refresh rate is zero.
    */
-  public restartPollingOfSingleDashboarItem(dashboardItem: DashboardItem) {
-    this.stopPollingOfSingleDashboarItem(dashboardItem);
+  public restartPollingOfSingleDashboardItem(dashboardItem: DashboardItem) {
+    this.stopPollingOfSingleDashboardItem(dashboardItem);
     if (dashboardItem.refreshRate > 0 ) {
       this.startPollingForSingleDashboardItem(dashboardItem);
     }
@@ -266,7 +272,7 @@ export class AnalyticsService {
    *
    * @param detailed If true will request additional counter values from the REST endpoint
    */
-  public getSingleCounter(counterName: string): Observable<Counter> {
+  private getSingleCounter(counterName: string): Observable<Counter> {
           const requestOptionsArgs: RequestOptionsArgs = HttpUtils.getDefaultRequestOptions();
           return this.http.get(this.metricsCountersUrl + '/' + counterName, requestOptionsArgs)
                           .map(response => {

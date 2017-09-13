@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AnalyticsService } from '../analytics.service';
@@ -52,40 +51,75 @@ export class DashboardComponent implements OnInit {
     this.analyticsService.addNewDashboardItem(index + 1);
   }
 
-  moveUpItem(dashboardItem: DashboardItem, currentIndex: number) {
+  /**
+   * Move dashboard item in the array up one position.
+   * @param {number} currentIndex The offset in the array move.
+   */
+  moveUpItem(currentIndex: number) {
     this.dashboardItems.splice(currentIndex - 1, 0, this.dashboardItems.splice(currentIndex, 1)[0]);
   }
-  moveDownItem(dashboardItem: DashboardItem, currentIndex: number) {
+
+  /**
+   * Move dashboard item in the array down one position.
+   * @param {number} currentIndex The offset in the array move.
+   */
+  moveDownItem(currentIndex: number) {
     this.dashboardItems.splice(currentIndex + 1, 0, this.dashboardItems.splice(currentIndex, 1)[0]);
   }
 
+  /**
+   * Empties dashboard array and inserts a single dashboard item.
+   */
   resetDashboard() {
     this.analyticsService.resetDashboard();
   }
 
+  /**
+   * Retrieves metrics for specific type.
+   * @param {MetricType} metricType to retrieve.
+   */
   onMetricTypeChange(metricType: MetricType) {
     console.log('Selected Metric Type:', metricType);
     this.analyticsService.getStreamsForMetricType(metricType).subscribe(result => {
-      console.log(result);
       this.counters = result.items;
     });
   }
 
+  /**
+   * Starts polling for the specific dashboardItem.
+   * @param {DashboardItem} dashBoardItem that polling should occur on.
+   */
   onCounterNameChange(dashBoardItem: DashboardItem) {
     console.log('Selected counter:', dashBoardItem.counter);
     console.log('Time to start polling for dashBoardItem:', dashBoardItem);
     this.analyticsService.startPollingForSingleDashboardItem(dashBoardItem);
   }
 
+  /**
+   * Set the refresh rate for a specific item.
+   * @param {number} newRefreshRate the updatedat refresh rate.
+   * @param {DashboardItem} dashboardItem the item to get the new rate.
+   */
   onRefreshRateChange(newRefreshRate: number, dashboardItem: DashboardItem) {
     console.log('New refresh rate:', newRefreshRate);
-    this.analyticsService.restartPollingOfSingleDashboarItem(dashboardItem);
+    this.analyticsService.restartPollingOfSingleDashboardItem(dashboardItem);
   }
 
+  /**
+   * No action on this method as of yet.
+   * @param {string} selectedVisualization
+   * @param {DashboardItem} dashboardItem
+   */
   onVisualizationChange(selectedVisualization: string, dashboardItem: DashboardItem) {
     console.log('A visualization was selected:', selectedVisualization);
   }
 
+  /**
+   * returns true if both counter names are the same or if counters are undefined.
+   * @param {Counter} counter1 the first counter in the set to compare.
+   * @param {Counter} counter2 the second counter in the set to compare.
+   * @returns {boolean} true if counter names are the same or both are undefined.
+   */
   compareCounter(counter1: Counter, counter2: Counter) {
     if (counter1 && counter2) {
       console.log(`Comparing counter1 ${counter1} and counter2 ${counter2}`);

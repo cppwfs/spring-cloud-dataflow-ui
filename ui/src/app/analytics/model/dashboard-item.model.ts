@@ -35,8 +35,6 @@ export class DashboardItem implements Serializable<DashboardItem> {
    * @param input JSON input data
    */
   public deserialize(input) {
-    // this.name = input.name;
-    // this.value = input.value;
     return this;
   }
 }

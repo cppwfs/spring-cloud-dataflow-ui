@@ -49,11 +49,11 @@
           <span class="help-block" *ngIf="refreshRate.invalid && refreshRate.touched">Please provide a valid refresh rate (seconds)</span>
       </td>
       <td class="action-column">
-          <button type="button" (click)="moveUpItem(item, index)" [disabled]="first"
+          <button type="button" (click)="moveUpItem(index)" [disabled]="first"
           class="btn btn-default" title="Details"
           ><span class="glyphicon glyphicon-arrow-up"></span>
           </button>
-          <button type="button" (click)="moveDownItem(item, index)" [disabled]="last"
+          <button type="button" (click)="moveDownItem(index)" [disabled]="last"
                   class="btn btn-default" style="margin-left: 0;" title="Details"
           ><span class="glyphicon glyphicon-arrow-down"></span>
           </button>
