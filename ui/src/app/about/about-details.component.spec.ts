@@ -1,5 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {BusyModule} from 'tixif-ngx-busy';
+import {BusyModule} from 'angular2-busy';
 import {ToastyService} from 'ng2-toasty';
 import {MockToastyService} from '../tests/mocks/toasty';
 import {MockActivatedRoute} from '../tests/mocks/activated-route';
@@ -10,7 +10,6 @@ import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AboutDetailsComponent} from './about-details.component';
-import {StompService} from 'ng2-stomp-service';
 import {KeyValuePipe} from '../shared/pipes/key-value-filter.pipe';
 import {ClipboardModule} from 'ngx-clipboard/dist';
 
@@ -20,7 +19,6 @@ describe('AboutDetailsComponent', () => {
   const toastyService = new MockToastyService();
   let activeRoute: MockActivatedRoute;
   const aboutService = new MockAboutService();
-  const stompService = new StompService();
 
   beforeEach(async(() => {
     aboutService.isAboutInfoAvailable = true;
@@ -37,8 +35,7 @@ describe('AboutDetailsComponent', () => {
       providers: [
         {provide: AboutService, useValue: aboutService},
         {provide: ToastyService, useValue: toastyService},
-        {provide: ActivatedRoute, useValue: activeRoute},
-        {provide: StompService, useValue: stompService}
+        {provide: ActivatedRoute, useValue: activeRoute}
       ]
     })
       .compileComponents();

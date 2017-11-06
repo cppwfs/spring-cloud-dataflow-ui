@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { AboutService } from './about.service';
 import { Subscription } from 'rxjs/Subscription';
 import { ToastyService } from 'ng2-toasty';
-import { StompService } from 'ng2-stomp-service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,7 +19,6 @@ export class AboutDetailsComponent implements OnInit {
   constructor(
     private aboutService: AboutService,
     private toastyService: ToastyService,
-    private stomp: StompService,
     private router: Router) {
   }
 
