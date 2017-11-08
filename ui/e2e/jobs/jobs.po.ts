@@ -1,8 +1,13 @@
 import { browser, by, element } from 'protractor';
 
-export class AppPage {
+/**
+ * E2E Page Object for jobs page.
+ *
+ * @author Glenn Renfro
+ */
+export class JobsPage {
   navigateTo() {
-    return browser.get('/');
+    return browser.get('#/jobs/executions');
   }
 
   getParagraphText() {
